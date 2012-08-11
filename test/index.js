@@ -66,6 +66,15 @@ module.exports = {
 			//test.deepEqual(result.status, "OK");
 			test.done();
 		});
+	 },
+	'scrape text from URL': function(test) {
+		var alchemy = new Alchemy(apikey);
+		alchemy.scrape(testURL, function(error, result) {
+			//console.log(result);
+			test.ifError(error);
+			//test.deepEqual(result.status, "OK");
+			test.done();
+		});
 	 }
 
 };

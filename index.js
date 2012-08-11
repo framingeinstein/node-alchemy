@@ -190,6 +190,10 @@ Alchemy.prototype.text = function(data, cb) {
 	this._doRequest(this._getQuery(data, "GetText"), cb);
 };
 
+Alchemy.prototype.scrape = function(data, cb) {
+	this._doRequest(this._getQuery(data, "GetConstraintQuery"), cb);
+};
+
 
 
 
