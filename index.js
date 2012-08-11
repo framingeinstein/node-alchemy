@@ -74,8 +74,8 @@ Alchemy.prototype._generateNiceUrl = function(query, method) {
  */
 Alchemy.prototype._doRequest = function(request_query, cb) {
   // Pass the requested URL as an object to the get request
-  
-  var post_req = http.request(request_query, function(res) {
+  //console.log(request_query.nice);
+  http.get(request_query.nice, function(res) {
      var data = [];
      res
       .on('data', function(chunk) { data.push(chunk); })
@@ -93,10 +93,12 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
   .on('error', function(e) {
       cb(e);
   });
-  var postdata = _getMethodType()
-  console.log(postdata);
-  post_req.write(postdata);
-  post_req.end();
+  /*
+  if(request_query.httpMethod == "POST") {
+  	post_req.write(postdata);
+  	post_req.end();
+  }
+  */
 };
 
 
@@ -121,220 +123,71 @@ Alchemy.prototype._htmlCheck = function(str) {
     return true;
 };
 
-Alchemy.prototype.sentiment = function(data, cb) {
-  var query = {
-     apikey: this.config.api_key
-    ,outputMode: this.config.format
-	,data: data
-  };
-  var post = {};
-  var method = "HTMLGetTextSentiment";
-  if(this._urlCheck(data)){
-	method = "URLGetTextSentiment";
-  } 
-  else if(!this._htmlCheck(data)){
-        method = "TextGetTextSentiment";
-     
-  } 
+Alchemy.prototype._getQuery = function(data, method) {
+	var query = {};
+	query.url = {
+	     apikey: this.config.api_key
+	    ,outputMode: this.config.format
+	};
+	query.data = data;
+	query.apimethod = "HTML" + method;
+	var httpMethod = "POST";
+	if(this._urlCheck(data)){
+		query.apimethod = "URL" + method;
+		httpMethod = "GET";
+		query.url.url = data;
+	} 
+	else if(!this._htmlCheck(data)){
+	    query.apimethod = "Text" + method;
+	} 
+	
+	query.nice = this._generateNiceUrl(query.url, query.apimethod);
+	query.nice.method = httpMethod;
+	
+	return query;
+	
+};
 
-  this._doRequest(this._generateNiceUrl(query, method), cb);
+Alchemy.prototype.sentiment = function(data, cb) {
+    this._doRequest(this._getQuery(data, "GetTextSentiment"), cb);
 };
 
 
 Alchemy.prototype.relations = function(data, cb) {
-  var query = {
-     apikey: this.config.api_key
-    ,outputMode: this.config.format
-  };
-  var post = {};
-  var method = "HTMLGetRelations";
-  if(this._urlCheck(data)){
-        method = "URLGetRelations";
-        post.url = data;
-  } 
-  else if(!this._htmlCheck(data)){
-        method = "TextGetRelations";
-        post.text = data;
-  } 
-  else{
-	post.html = data;
-  }
-
-  this._doRequest(this._generateNiceUrl(query, method), post, cb);
+	this._doRequest(this._getQuery(data, "GetRelations"), cb);
 };
 
 
 Alchemy.prototype.concepts = function(data, cb) {
-  var query = {
-     apikey: this.config.api_key
-    ,outputMode: this.config.format
-  };
-  var post = {};
-  var method = "HTMLGetRankedConcepts";
-  if(this._urlCheck(data)){
-        method = "URLGetRankedConcepts";
-        post.url = data;
-  } 
-  else if(!this._htmlCheck(data)){
-        method = "TextGetRankedConcepts";
-        post.text = data;
-  }
-  else{
-	post.html = data;
-  }
-
-  this._doRequest(this._generateNiceUrl(query, method), post, cb);
+	this._doRequest(this._getQuery(data, "GetRankedConcepts"), cb);
 };
 
 
 Alchemy.prototype.entities = function(data, cb) {
-  var query = {
-     apikey: this.config.api_key
-    ,outputMode: this.config.format
-  };
-  var post = {};
-  var method = "HTMLGetRankedNamedEntities";
-  if(this._urlCheck(data)){
-        method = "URLGetRankedNamedEntities";
-        post.url = data;
-  } 
-  else if(!this._htmlCheck(data)){
-        method = "TextGetRankedNamedEntities";
-	post.text = data;
-  } 
-  else{
-	post.html = data;
-  }
-
-  this._doRequest(this._generateNiceUrl(query, method), post, cb);
+	this._doRequest(this._getQuery(data, "GetRankedNamedEntities"), cb);
 };
-
-Alchemy.prototype.entities = function(data, cb) {
-  var query = {
-     apikey: this.config.api_key
-    ,outputMode: this.config.format
-  };
-  var post = {};
-  var method = "HTMLGetRankedNamedEntities";
-  if(this._urlCheck(data)){
-	method = "URLGetRankedNamedEntities";
-        post.url = data;
-  } 
-  else if(!this._htmlCheck(data)){
-        method = "TextGetRankedNamedEntities";
-        post.text = data;
-  } 
-  else{
-        post.html = data;
-  }
-
-  this._doRequest(this._generateNiceUrl(query, method), post, cb);
-};
-
 
 Alchemy.prototype.keywords = function(data, cb) {
-  var query = {
-     apikey: this.config.api_key
-    ,outputMode: this.config.format
-  };
-  var post = {};
-  var method = "HTMLGetRankedKeywords";
-  if(this._urlCheck(data)){
-        method = "URLGetRankedKeywords";
-        post.url = data;
-  } 
-  else if(!this._htmlCheck(data)){
-        method = "TextGetRankedKeywords";
-        post.text = data;
-  }
-  else{
-	post.html = data;
-  }
-
-  this._doRequest(this._generateNiceUrl(query, method), post, cb);
+	this._doRequest(this._getQuery(data, "GetRankedKeywords"), cb);
 };
 
 
 Alchemy.prototype.category = function(data, cb) {
-  var query = {
-     apikey: this.config.api_key
-    ,outputMode: this.config.format
-  };
-  var post = {};
-  var method = "HTMLGetCategory";
-  if(this._urlCheck(data)){
-        method = "URLGetCategory";
-        post.url = data;
-  }
-  else if(!this._htmlCheck(data)){
-        method = "TextGetCategory";
-        post.text = data;
-  }
-  else{
-        post.html = data;
-  }
-
-  this._doRequest(this._generateNiceUrl(query, method), post, cb);
+	this._doRequest(this._getQuery(data, "GetCategory"), cb);
 };
 
 Alchemy.prototype.language = function(data, cb) {
-  var query = {
-     apikey: this.config.api_key
-    ,outputMode: this.config.format
-  };
-  var post = {};
-  var method = "HTMLGetLanguage";
-  if(this._urlCheck(data)){
-        method = "URLGetLanguage";
-        post.url = data;
-  }
-  else if(!this._htmlCheck(data)){
-        method = "TextGetLanguage";
-        post.text = data;
-  }
-  else{
-       	post.html = data;
-  }
-
-  this._doRequest(this._generateNiceUrl(query, method), post, cb);
+	this._doRequest(this._getQuery(data, "GetLanguage"), cb);
 };
 
 
 Alchemy.prototype.author = function(data, cb) {
-  var query = {
-     apikey: this.config.api_key
-    ,outputMode: this.config.format
-  };
-  var post = {};
-  var method = "HTMLGetAuthor";
-  if(this._urlCheck(data)){
-        method = "URLGetAuthor";
-        post.url = data;
-  }
-  else{
-       	post.html = data;
-  }
-
-  this._doRequest(this._generateNiceUrl(query, method), post, cb);
+	this._doRequest(this._getQuery(data, "GetAuthor"), cb);
 };
 
 
 Alchemy.prototype.text = function(data, cb) {
-  var url = {
-     apikey: this.config.api_key
-    ,outputMode: this.config.format
-  };
-  var post = {};
-  var method = "HTMLGetText";
-  if(this._urlCheck(data)){
-        method = "URLGetText";
-        post.url = data;
-  }
-  else{
-        post.html = data;
-  }
- 
-  this._doRequest(this._generateNiceUrl(query, method), post, cb);
+	this._doRequest(this._getQuery(data, "GetText"), cb);
 };
 
 
