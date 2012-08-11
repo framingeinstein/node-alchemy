@@ -8,7 +8,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/tanepiper/node-bitly.git"
+    "url": "http://github.com/framingeinstein/node-alchemy.git"
   },
   "engines": { "node": ">= 0.4.0" },
   "scripts": {
