@@ -75,16 +75,20 @@ Alchemy.prototype._generateNiceUrl = function(query, method) {
 Alchemy.prototype._doRequest = function(request_query, cb) {
   // Pass the requested URL as an object to the get request
   //console.log(request_query.nice);
-  http.get(request_query.nice, function(res) {
+  var req = http.request(request_query.nice, function(res) {
      var data = [];
      res
       .on('data', function(chunk) { data.push(chunk); })
       .on('end', function() {
           var urldata = data.join('').trim();
+		  //console.log(urldata);
           var result;
           try {
             result = JSON.parse(urldata);
           } catch (exp) {
+			console.log(request_query.nice.href);
+			console.log(querystring.stringify(request_query.post));
+			console.log(urldata);
             result = {'status_code': 500, 'status_text': 'JSON Parse Failed'};
           }
           cb(null, result);
@@ -93,12 +97,13 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
   .on('error', function(e) {
       cb(e);
   });
-  /*
-  if(request_query.httpMethod == "POST") {
-  	post_req.write(postdata);
-  	post_req.end();
+
+  if(req.method == "POST") {
+		req.write(querystring.stringify(request_query.post));
   }
-  */
+
+  req.end();
+
 };
 
 
@@ -118,8 +123,13 @@ Alchemy.prototype._urlCheck = function(str) {
  *
  */
 Alchemy.prototype._htmlCheck = function(str) {
-    var v = new RegExp("<([A-Z][A-Z0-9]*)\b[^>]*>(.*?)</\1>", "i");
-    if (!v.test(str)) return false;
+    var v = new RegExp();
+    v.compile("<[A-Za-z][A-Za-z0-9][^>]*>");
+	//var v = new RegExp("</\?([a-z][a-z0-9]*)\b[^>]*>", "i");
+	//var v = //
+	//console.log(v.test(str));
+	//console.log(str);
+	if (!v.test(str)) return false;
     return true;
 };
 
@@ -130,19 +140,28 @@ Alchemy.prototype._getQuery = function(data, method) {
 	    ,outputMode: this.config.format
 	};
 	query.data = data;
+	query.post = {};
 	query.apimethod = "HTML" + method;
 	var httpMethod = "POST";
 	if(this._urlCheck(data)){
 		query.apimethod = "URL" + method;
 		httpMethod = "GET";
 		query.url.url = data;
+		
 	} 
 	else if(!this._htmlCheck(data)){
 	    query.apimethod = "Text" + method;
+		query.post = {text: data};
+		query.headers = {'content-length': data.length};
 	} 
+	else {
+		query.post = {html: data};
+		query.headers = {'content-length': data.length};
+	}
 	
 	query.nice = this._generateNiceUrl(query.url, query.apimethod);
 	query.nice.method = httpMethod;
+	query.nice.headers = query.headers;
 	
 	return query;
 	
@@ -182,15 +201,27 @@ Alchemy.prototype.language = function(data, cb) {
 
 
 Alchemy.prototype.author = function(data, cb) {
+	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
+		cb(new Error('The author method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
+		return;
+	}
 	this._doRequest(this._getQuery(data, "GetAuthor"), cb);
 };
 
 
 Alchemy.prototype.text = function(data, cb) {
+	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
+		cb(new Error('The text method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
+		return;
+	}
 	this._doRequest(this._getQuery(data, "GetText"), cb);
 };
 
 Alchemy.prototype.scrape = function(data, cb) {
+	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
+		cb(new Error('The scrape method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
+		return;
+	}
 	this._doRequest(this._getQuery(data, "GetConstraintQuery"), cb);
 };
 
