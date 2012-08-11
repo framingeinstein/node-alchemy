@@ -1,5 +1,6 @@
 var url = require('url');
 var http = require('http');
+var querystring = require('querystring');
 
 var Alchemy = function(api_key, options) {
 	options = options || {
@@ -23,13 +24,21 @@ var Alchemy = function(api_key, options) {
  * @param {String} method The Alchemy API method to call with the request
  * @return {String}
  */
-Alchemy.prototype._getPathFromMethod = function(method){
+Alchemy.prototype._getMethodType = function(method){
 	var regex = new RegExp("^(text|html|url)", "i");
 	var results = regex.exec(method);
 	if(results != null){
-		return "/" + results[0].toLowerCase();
+		return results[0].toLowerCase();
 	}
 	
+	return "";
+};
+
+Alchemy.prototype._getPathFromMethod = function(method){
+	var results = this._getMethodType(method);
+	if(results != ""){
+		return "/" + results;
+	}
 	return "";
 };
 
@@ -46,11 +55,13 @@ Alchemy.prototype._generateNiceUrl = function(query, method) {
     protocol: this.config.protocol,
     hostname: this.config.api_url,
     pathname: '/calls' + this._getPathFromMethod(method) + '/' + method,
+	method: "POST",
     query: query
   }));
   // HACK: Fixes the redirection issue in node 0.4.x
   if (!result.path) { result.path = result.pathname + result.search; }
-
+  //console.log(result);
+  //if (this._urlCheck())
   return result;
 };
 
@@ -63,9 +74,10 @@ Alchemy.prototype._generateNiceUrl = function(query, method) {
  */
 Alchemy.prototype._doRequest = function(request_query, cb) {
   // Pass the requested URL as an object to the get request
-  http.get(request_query, function(res) {
-      var data = [];
-      res
+  
+  var post_req = http.request(request_query, function(res) {
+     var data = [];
+     res
       .on('data', function(chunk) { data.push(chunk); })
       .on('end', function() {
           var urldata = data.join('').trim();
@@ -81,6 +93,10 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
   .on('error', function(e) {
       cb(e);
   });
+  var postdata = _getMethodType()
+  console.log(postdata);
+  post_req.write(postdata);
+  post_req.end();
 };
 
 
@@ -109,21 +125,18 @@ Alchemy.prototype.sentiment = function(data, cb) {
   var query = {
      apikey: this.config.api_key
     ,outputMode: this.config.format
+	,data: data
   };
-
+  var post = {};
   var method = "HTMLGetTextSentiment";
   if(this._urlCheck(data)){
 	method = "URLGetTextSentiment";
-	post.url = data;
   } 
   else if(!this._htmlCheck(data)){
         method = "TextGetTextSentiment";
-        post.text = data;
+     
   } 
-  else{
-	post.html = data;
-  }
-  
+
   this._doRequest(this._generateNiceUrl(query, method), cb);
 };
 
@@ -133,7 +146,7 @@ Alchemy.prototype.relations = function(data, cb) {
      apikey: this.config.api_key
     ,outputMode: this.config.format
   };
-
+  var post = {};
   var method = "HTMLGetRelations";
   if(this._urlCheck(data)){
         method = "URLGetRelations";
@@ -147,7 +160,7 @@ Alchemy.prototype.relations = function(data, cb) {
 	post.html = data;
   }
 
-  this._doRequest(this._generateNiceUrl(query, method), cb);
+  this._doRequest(this._generateNiceUrl(query, method), post, cb);
 };
 
 
@@ -156,7 +169,7 @@ Alchemy.prototype.concepts = function(data, cb) {
      apikey: this.config.api_key
     ,outputMode: this.config.format
   };
-
+  var post = {};
   var method = "HTMLGetRankedConcepts";
   if(this._urlCheck(data)){
         method = "URLGetRankedConcepts";
@@ -170,7 +183,7 @@ Alchemy.prototype.concepts = function(data, cb) {
 	post.html = data;
   }
 
-  this._doRequest(this._generateNiceUrl(query, method), cb);
+  this._doRequest(this._generateNiceUrl(query, method), post, cb);
 };
 
 
@@ -179,7 +192,7 @@ Alchemy.prototype.entities = function(data, cb) {
      apikey: this.config.api_key
     ,outputMode: this.config.format
   };
-
+  var post = {};
   var method = "HTMLGetRankedNamedEntities";
   if(this._urlCheck(data)){
         method = "URLGetRankedNamedEntities";
@@ -193,7 +206,7 @@ Alchemy.prototype.entities = function(data, cb) {
 	post.html = data;
   }
 
-  this._doRequest(this._generateNiceUrl(query, method), cb);
+  this._doRequest(this._generateNiceUrl(query, method), post, cb);
 };
 
 Alchemy.prototype.entities = function(data, cb) {
@@ -201,7 +214,7 @@ Alchemy.prototype.entities = function(data, cb) {
      apikey: this.config.api_key
     ,outputMode: this.config.format
   };
-
+  var post = {};
   var method = "HTMLGetRankedNamedEntities";
   if(this._urlCheck(data)){
 	method = "URLGetRankedNamedEntities";
@@ -215,7 +228,7 @@ Alchemy.prototype.entities = function(data, cb) {
         post.html = data;
   }
 
-  this._doRequest(this._generateNiceUrl(query, method), cb);
+  this._doRequest(this._generateNiceUrl(query, method), post, cb);
 };
 
 
@@ -224,7 +237,7 @@ Alchemy.prototype.keywords = function(data, cb) {
      apikey: this.config.api_key
     ,outputMode: this.config.format
   };
-
+  var post = {};
   var method = "HTMLGetRankedKeywords";
   if(this._urlCheck(data)){
         method = "URLGetRankedKeywords";
@@ -238,7 +251,7 @@ Alchemy.prototype.keywords = function(data, cb) {
 	post.html = data;
   }
 
-  this._doRequest(this._generateNiceUrl(query, method), cb);
+  this._doRequest(this._generateNiceUrl(query, method), post, cb);
 };
 
 
@@ -247,7 +260,7 @@ Alchemy.prototype.category = function(data, cb) {
      apikey: this.config.api_key
     ,outputMode: this.config.format
   };
-
+  var post = {};
   var method = "HTMLGetCategory";
   if(this._urlCheck(data)){
         method = "URLGetCategory";
@@ -261,7 +274,7 @@ Alchemy.prototype.category = function(data, cb) {
         post.html = data;
   }
 
-  this._doRequest(this._generateNiceUrl(query, method), cb);
+  this._doRequest(this._generateNiceUrl(query, method), post, cb);
 };
 
 Alchemy.prototype.language = function(data, cb) {
@@ -269,7 +282,7 @@ Alchemy.prototype.language = function(data, cb) {
      apikey: this.config.api_key
     ,outputMode: this.config.format
   };
-
+  var post = {};
   var method = "HTMLGetLanguage";
   if(this._urlCheck(data)){
         method = "URLGetLanguage";
@@ -283,7 +296,7 @@ Alchemy.prototype.language = function(data, cb) {
        	post.html = data;
   }
 
-  this._doRequest(this._generateNiceUrl(query, method), cb);
+  this._doRequest(this._generateNiceUrl(query, method), post, cb);
 };
 
 
@@ -292,7 +305,7 @@ Alchemy.prototype.author = function(data, cb) {
      apikey: this.config.api_key
     ,outputMode: this.config.format
   };
-
+  var post = {};
   var method = "HTMLGetAuthor";
   if(this._urlCheck(data)){
         method = "URLGetAuthor";
@@ -302,16 +315,16 @@ Alchemy.prototype.author = function(data, cb) {
        	post.html = data;
   }
 
-  this._doRequest(this._generateNiceUrl(query, method), cb);
+  this._doRequest(this._generateNiceUrl(query, method), post, cb);
 };
 
 
 Alchemy.prototype.text = function(data, cb) {
-  var query = {
+  var url = {
      apikey: this.config.api_key
     ,outputMode: this.config.format
   };
-
+  var post = {};
   var method = "HTMLGetText";
   if(this._urlCheck(data)){
         method = "URLGetText";
@@ -320,8 +333,8 @@ Alchemy.prototype.text = function(data, cb) {
   else{
         post.html = data;
   }
-
-  this._doRequest(this._generateNiceUrl(query, method), cb);
+ 
+  this._doRequest(this._generateNiceUrl(query, method), post, cb);
 };
 
 
