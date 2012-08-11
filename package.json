@@ -1,0 +1,20 @@
+{
+  "name": "alchemy",
+  "description": "An Alchemy API library for Node.JS",
+  "tags": ["Alchemy", "Natural Language Processing", "util"],
+  "version": "1.2.4",
+  "author": "Jason Morgan <jason@framingeinstein.com>",
+  "contributors": [
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/tanepiper/node-bitly.git"
+  },
+  "engines": { "node": ">= 0.4.0" },
+  "scripts": {
+    "test": "node_modules/.bin/nodeunit test"
+  },
+  "devDependencies": {
+    "nodeunit": ">=0.6.2"
+  }
+}
