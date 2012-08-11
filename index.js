@@ -92,7 +92,11 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
             result = {'status_code': 500, 'status_text': 'JSON Parse Failed'};
           }
           cb(null, result);
-      });
+      })
+	 .on("error", function (e) {
+			console.log(e);
+			cb(e);
+	  });
   });
 
   req.on('error', function(e) {
