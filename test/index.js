@@ -224,7 +224,7 @@ module.exports = {
 			var alchemy = new Alchemy(apikey);
 			alchemy.language(testText, function(error, result) {
 				test.ifError(error);
-				test.deepEqual(result.status, "OK");
+				test.deepEqual(result.status, "OK"); 
 				test.done();
 			});
 		 },
