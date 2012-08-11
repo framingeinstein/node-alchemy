@@ -93,8 +93,9 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
           }
           cb(null, result);
       });
-  })
-  .on('error', function(e) {
+  });
+
+  req.on('error', function(e) {
       cb(e);
   });
 
