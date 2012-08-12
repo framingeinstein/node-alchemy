@@ -1,7 +1,7 @@
 var url = require('url');
 var http = require('http');
 var querystring = require('querystring');
-
+//To install via NPM type the following: `npm install alchemy-api`
 var AlchemyAPI = function(api_key, options) {
 	options = options || {
 		 format: "json"

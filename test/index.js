@@ -1,12 +1,12 @@
 var Alchemy = require('../');
 
-var testURL = "http://www.inspirational-quotes.info/success-quotes.html";
+var testURL = "http://www.nytimes.com/";
 
-var testHTML = '<html><head><title>Alchemy Test HTML</title><meta name="author" content="Jason Morgan" /></head><body><h1>Alchemy Test HTML</h1><p>I am very happy about the event at Nauticus this morning.  Paul Ryan is a great pick for Mitt Romney\'s running mate.  Romney and Ryan with defeat Obama in 2012</p></body></html>';
+var testHTML = '<html><head><title>Alchemy Test HTML</title><meta name="author" content="Jason Morgan" /></head><body><h1>Alchemy Test HTML</h1><p>This is something I am writing about.  I have to write this as I do not feel like getting it from the web.  So here it is.  A bunch of text to test the API with</p></body></html>';
 
-var testText ="I am very happy about the event at Nauticus this morning.  Paul Ryan is a great pick for Mitt Romney\'s running mate.  Romney and Ryan with defeat Obama in 2012";
+var testText ="This is something I am writing about.  I have to write this as I do not feel like getting it from the web.  So here it is.  A bunch of text to test the API with";
 
-var apikey = "fcb11f5cebca4850ae9771ed0678ae4222d5733e";
+var apikey = "00000f5cebca4850ae9771ed0678ae4222000000";
 module.exports = {
 	
 	'check html match': function(test) {
