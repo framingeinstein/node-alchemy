@@ -89,9 +89,9 @@ module.exports = {
 			test.done();
 		});
 	 },
-	*/
+	
 	//Tests for HTML content post to Alchemy
-	/*
+	
 	
 	'get sentiment from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);

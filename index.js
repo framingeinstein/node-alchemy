@@ -77,14 +77,14 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
   //console.log(request_query.nice);
   
   //var server = http.createClient(80, this.config.api_url);
-  console.log(JSON.stringify(request_query.nice));
+  //console.log(JSON.stringify(request_query.nice));
   var req = http.request(request_query.nice, function(res) {
      var data = [];
      res
       .on('data', function(chunk) { data.push(chunk); })
       .on('end', function() {
           var urldata = data.join('').trim();
-		  console.log(urldata);
+		  //console.log(urldata);
           var result;
           try {
             result = JSON.parse(urldata);
@@ -96,7 +96,7 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
           }
           cb(null, result);
       })
-	 .on(:"error", function (err) {
+	 .on("error", function (err) {
 		cb(err, null);	
 	  });
 
