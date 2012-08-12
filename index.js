@@ -94,6 +94,7 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
 			//console.log(urldata);
             result = {'status_code': 500, 'status_text': 'JSON Parse Failed'};
           }
+		  //console.log(result);
           cb(null, result);
       })
 	 .on("error", function (err) {
