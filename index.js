@@ -1,3 +1,10 @@
+/**
+ * alchemy-api - A node module for calling the Alchemy API
+ * See http://www.alchemyapi.com/api/ for details about the API requests and responses
+ * Copyright (c) 2012 Jason Morgan
+ * MIT Licence
+ */
+
 var url = require('url');
 var http = require('http');
 var querystring = require('querystring');
