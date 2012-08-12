@@ -1,5 +1,5 @@
 {
-  "name": "node-alchemy-api",
+  "name": "alchemy-api",
   "description": "An Alchemy API library for Node.JS",
   "tags": ["Alchemy", "Natural Language Processing", "util"],
   "version": "0.5.0",
