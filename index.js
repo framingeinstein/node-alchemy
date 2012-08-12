@@ -298,8 +298,31 @@ AlchemyAPI.prototype.scrape = function(data, options, cb) {
 	this._doRequest(this._getQuery(data, "GetConstraintQuery"), cb);
 };
 
+/**
+ * Function to return the microformats used in a URL or html text passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url or html text
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.microformats = function(data, options, cb) {
+	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
+		cb(new Error('The microformats method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
+		return;
+	}
+	this._doRequest(this._getQuery(data, "GetMicroformatData"), cb);
+};
 
-
+/**
+ * Function to return the RSS/ATOM feeds found in a URL or html text passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url or html text
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.feeds = function(data, options, cb) {
+	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
+		cb(new Error('The feeds method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
+		return;
+	}
+	this._doRequest(this._getQuery(data, "GetFeedLinks"), cb);
+};
 
 // Export as main entry point in this module
 module.exports = AlchemyAPI;

@@ -1,5 +1,6 @@
-[![Build Status](https://secure.travis-ci.org/framingeinstein/node-alchemy.png)](http://travis-ci.org/framingeinstein/node-alchemy) alchemy-api - An Alchemy API library for NodeJS
+ alchemy-api - An Alchemy API library for NodeJS
 ====================
+[![Build Status](https://secure.travis-ci.org/framingeinstein/node-alchemy.png)](http://travis-ci.org/framingeinstein/node-alchemy)
 
 This module provides calls to the [Alchemy](http://www.alchemyapi.com/) API for [Nodejs](http://nodejs.org).
 For more information on the API request and responses visit the [Alchemy API docs](http://www.alchemyapi.com/api/).  To use the module you will need to obtain an api key from [Alchemy](http://www.alchemyapi.com/api/register.html).
@@ -157,6 +158,32 @@ Structured Content Scraping
 
       // See http://www.alchemyapi.com/api/ for format of returned object
       var results = response.queryResults;
+
+      // Do something with data
+    });
+
+Microformats
+------------
+    var AlchemyAPI = require('alchemy-api');
+    var alchemy = new AlchemyAPI('<YOUR API KEY>');
+    alchemy.microformats('<URL|HTML>', {}, function(err, response) {
+      if (err) throw err;
+
+      // See http://www.alchemyapi.com/api/mformat/htmlc.html for format of returned object
+      var microformats = response.microformats;
+
+      // Do something with data
+    });
+
+RSS / ATOM Feed Discovery
+----------
+    var AlchemyAPI = require('alchemy-api');
+    var alchemy = new AlchemyAPI('<YOUR API KEY>');
+    alchemy.feeds('<URL|HTML>', {}, function(err, response) {
+      if (err) throw err;
+
+      // See http://www.alchemyapi.com/api/mformat/htmlc.html for format of returned object
+      var feeds = response.feeds;
 
       // Do something with data
     });
