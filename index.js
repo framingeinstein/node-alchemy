@@ -84,14 +84,14 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
   //console.log(request_query.nice);
   
   //var server = http.createClient(80, this.config.api_url);
-  //console.log(JSON.stringify(request_query.nice));
+  console.log(JSON.stringify(request_query.nice));
   var req = http.request(request_query.nice, function(res) {
      var data = [];
      res
       .on('data', function(chunk) { data.push(chunk); })
       .on('end', function() {
           var urldata = data.join('').trim();
-		  //console.log(urldata);
+		  console.log(urldata);
           var result;
           try {
             result = JSON.parse(urldata);
@@ -121,6 +121,7 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
   });
 
   if(req.method == "POST") {
+		console.log(querystring.stringify(request_query.post));
 		req.end(querystring.stringify(request_query.post));
   } else {
 		req.end();
@@ -187,11 +188,17 @@ AlchemyAPI.prototype._getQuery = function(data, method) {
 	else if(!this._htmlCheck(data)){
 	    query.apimethod = "Text" + method;
 		query.post = {text: data};
-		query.headers = {'content-length': data.length};
+		query.headers = {
+			 'content-length': data.length
+			,'content-type': 'application/x-www-form-urlencoded'
+		};
 	} 
 	else {
 		query.post = {html: data};
-		query.headers = {'content-length': data.length};
+		query.headers = {
+			 'content-length': data.length
+			,'content-type': 'application/x-www-form-urlencoded'
+		};
 	}
 	
 	query.nice = this._generateNiceUrl(query.url, query.apimethod);
