@@ -104,6 +104,7 @@ module.exports = {
 	'get relations from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.relations(testHTML, function(error, result) {
+			
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
 			test.done();

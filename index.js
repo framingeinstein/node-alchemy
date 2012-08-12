@@ -86,15 +86,15 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
           try {
             result = JSON.parse(urldata);
           } catch (exp) {
-			console.log(request_query.nice.href);
-			console.log(querystring.stringify(request_query.post));
-			console.log(urldata);
+			//console.log(request_query.nice.href);
+			//console.log(querystring.stringify(request_query.post));
+			//console.log(urldata);
             result = {'status_code': 500, 'status_text': 'JSON Parse Failed'};
           }
           cb(null, result);
       })
 	 .on("error", function (e) {
-			console.log(e);
+			//console.log(e);
 			cb(e);
 	  });
   });
@@ -104,10 +104,12 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
   });
 
   if(req.method == "POST") {
-		req.write(querystring.stringify(request_query.post));
+		req.end(querystring.stringify(request_query.post));
+  } else {
+		req.end();
   }
 
-  req.end();
+  
 
 };
 
