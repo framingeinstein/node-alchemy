@@ -17,7 +17,7 @@ module.exports = {
 	},
 	'get sentiment from URL': function(test) {
 		var alchemy = new Alchemy(apikey);
-	    alchemy.sentiment(testURL, function(error, result) {
+	    alchemy.sentiment(testURL, {}, function(error, result) {
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
 			test.done();
@@ -25,7 +25,7 @@ module.exports = {
 	},
 	'get relations from URL': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.relations(testURL, function(error, result) {
+		alchemy.relations(testURL, {}, function(error, result) {
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
 			test.done();
@@ -33,7 +33,7 @@ module.exports = {
 	 },
 	'get concepts from URL': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.concepts(testURL, function(error, result) {
+		alchemy.concepts(testURL, {}, function(error, result) {
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
 			test.done();
@@ -41,7 +41,7 @@ module.exports = {
 	 },
 	'get entities from URL': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.entities(testURL, function(error, result) {
+		alchemy.entities(testURL, {}, function(error, result) {
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
 			test.done();
@@ -49,7 +49,7 @@ module.exports = {
 	 },
 	'get keywords from URL': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.keywords(testURL, function(error, result) {
+		alchemy.keywords(testURL, {}, function(error, result) {
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
 			test.done();
@@ -57,7 +57,7 @@ module.exports = {
 	 },
 	'get category from URL': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.category(testURL, function(error, result) {
+		alchemy.category(testURL, {}, function(error, result) {
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
 			test.done();
@@ -65,7 +65,7 @@ module.exports = {
 	 },
 	'get language from URL': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.language(testURL, function(error, result) {
+		alchemy.language(testURL, {}, function(error, result) {
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
 			test.done();
@@ -73,7 +73,7 @@ module.exports = {
 	 },
 	'get author from URL': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.author(testURL, function(error, result) {
+		alchemy.author(testURL, {}, function(error, result) {
 			//console.log(result);
 			test.ifError(error);
 			//test.deepEqual(result.status, "OK");
@@ -82,7 +82,7 @@ module.exports = {
 	 },
 	'scrape text from URL': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.scrape(testURL, function(error, result) {
+		alchemy.scrape(testURL, {}, function(error, result) {
 			//console.log(result);
 			test.ifError(error);
 			//test.deepEqual(result.status, "OK");
@@ -95,7 +95,7 @@ module.exports = {
 	
 	'get sentiment from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);
-	    alchemy.sentiment(testHTML, function(error, result) {
+	    alchemy.sentiment(testHTML, {}, function(error, result) {
 			test.ifError(error);
 			//console.log(result);
 			test.deepEqual(result.status, "OK");
@@ -105,7 +105,7 @@ module.exports = {
 	
 	'get relations from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.relations(testHTML, function(error, result) {
+		alchemy.relations(testHTML, {}, function(error, result) {
 			
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
@@ -114,7 +114,7 @@ module.exports = {
 	 },
 	'get concepts from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.concepts(testHTML, function(error, result) {
+		alchemy.concepts(testHTML, {}, function(error, result) {
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
 			test.done();
@@ -122,7 +122,7 @@ module.exports = {
 	 },
 	'get entities from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.entities(testHTML, function(error, result) {
+		alchemy.entities(testHTML, {}, function(error, result) {
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
 			test.done();
@@ -130,7 +130,7 @@ module.exports = {
 	 },
 	'get keywords from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.keywords(testHTML, function(error, result) {
+		alchemy.keywords(testHTML, {}, function(error, result) {
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
 			test.done();
@@ -138,7 +138,7 @@ module.exports = {
 	 },
 	'get category from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.category(testHTML, function(error, result) {
+		alchemy.category(testHTML, {}, function(error, result) {
 			test.ifError(error);
 			//test.deepEqual(result.status, "OK");
 			test.done();
@@ -146,7 +146,7 @@ module.exports = {
 	 },
 	'get language from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.language(testHTML, function(error, result) {
+		alchemy.language(testHTML, {}, function(error, result) {
 			test.ifError(error);
 			test.deepEqual(result.status, "OK");
 			test.done();
@@ -154,7 +154,7 @@ module.exports = {
 	 },
 	'get author from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.author(testHTML, function(error, result) {
+		alchemy.author(testHTML, {}, function(error, result) {
 			//console.log(result);
 			test.ifError(error);
 			//test.deepEqual(result.status, "OK");
@@ -163,7 +163,7 @@ module.exports = {
 	 },
 	'scrape text from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.scrape(testHTML, function(error, result) {
+		alchemy.scrape(testHTML, {}, function(error, result) {
 			//console.log(result);
 			test.ifError(error);
 			//test.deepEqual(result.status, "OK");
@@ -175,7 +175,7 @@ module.exports = {
 		
 		'get sentiment from Text': function(test) {
 			var alchemy = new Alchemy(apikey);
-		    alchemy.sentiment(testText, function(error, result) {
+		    alchemy.sentiment(testText, {}, function(error, result) {
 				test.ifError(error);
 				//console.log(result);
 				test.deepEqual(result.status, "OK");
@@ -184,7 +184,7 @@ module.exports = {
 		},
 		'get relations from Text': function(test) {
 			var alchemy = new Alchemy(apikey);
-			alchemy.relations(testText, function(error, result) {
+			alchemy.relations(testText, {}, function(error, result) {
 				test.ifError(error);
 				test.deepEqual(result.status, "OK");
 				test.done();
@@ -192,7 +192,7 @@ module.exports = {
 		 },
 		'get concepts from Text': function(test) {
 			var alchemy = new Alchemy(apikey);
-			alchemy.concepts(testText, function(error, result) {
+			alchemy.concepts(testText, {}, function(error, result) {
 				test.ifError(error);
 				test.deepEqual(result.status, "OK");
 				test.done();
@@ -200,7 +200,7 @@ module.exports = {
 		 },
 		'get entities from Text': function(test) {
 			var alchemy = new Alchemy(apikey);
-			alchemy.entities(testText, function(error, result) {
+			alchemy.entities(testText, {}, function(error, result) {
 				test.ifError(error);
 				test.deepEqual(result.status, "OK");
 				test.done();
@@ -208,7 +208,7 @@ module.exports = {
 		 },
 		'get keywords from Text': function(test) {
 			var alchemy = new Alchemy(apikey);
-			alchemy.keywords(testText, function(error, result) {
+			alchemy.keywords(testText, {}, function(error, result) {
 				test.ifError(error);
 				test.deepEqual(result.status, "OK");
 				test.done();
@@ -216,7 +216,7 @@ module.exports = {
 		 },
 		'get category from Text': function(test) {
 			var alchemy = new Alchemy(apikey);
-			alchemy.category(testText, function(error, result) {
+			alchemy.category(testText, {}, function(error, result) {
 				test.ifError(error);
 				//test.deepEqual(result.status, "OK");
 				test.done();
@@ -224,7 +224,7 @@ module.exports = {
 		 },
 		'get language from Text': function(test) {
 			var alchemy = new Alchemy(apikey);
-			alchemy.language(testText, function(error, result) {
+			alchemy.language(testText, {}, function(error, result) {
 				test.ifError(error);
 				test.deepEqual(result.status, "OK"); 
 				test.done();
@@ -232,7 +232,7 @@ module.exports = {
 		 },
 		'get author from Text': function(test) {
 			var alchemy = new Alchemy(apikey);
-			alchemy.author(testText, function(error, result) {
+			alchemy.author(testText, {}, function(error, result) {
 				//console.log(error);
 				test.ok(error != null);
 				//test.deepEqual(result.status, "OK");
@@ -241,7 +241,7 @@ module.exports = {
 		 },
 		'scrape text from Text': function(test) {
 			var alchemy = new Alchemy(apikey);
-			alchemy.scrape(testText, function(error, result) {
+			alchemy.scrape(testText, {}, function(error, result) {
 				//console.log(error);
 				test.ok(error != null);
 				//test.deepEqual(result.status, "OK");

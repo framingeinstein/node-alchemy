@@ -2,7 +2,7 @@ var url = require('url');
 var http = require('http');
 var querystring = require('querystring');
 
-var Alchemy = function(api_key, options) {
+var AlchemyAPI = function(api_key, options) {
 	options = options || {
 		 format: "json"
 		,api_url: "access.alchemyapi.com"
@@ -24,7 +24,7 @@ var Alchemy = function(api_key, options) {
  * @param {String} method The Alchemy API method to call with the request
  * @return {String}
  */
-Alchemy.prototype._getMethodType = function(method){
+AlchemyAPI.prototype._getMethodType = function(method){
 	var regex = new RegExp("^(text|html|url)", "i");
 	var results = regex.exec(method);
 	if(results != null){
@@ -34,7 +34,7 @@ Alchemy.prototype._getMethodType = function(method){
 	return "";
 };
 
-Alchemy.prototype._getPathFromMethod = function(method){
+AlchemyAPI.prototype._getPathFromMethod = function(method){
 	var results = this._getMethodType(method);
 	if(results != ""){
 		return "/" + results;
@@ -50,7 +50,7 @@ Alchemy.prototype._getPathFromMethod = function(method){
  * @param  {String} method The Alchemy API method to call with the request
  * @return {Object} The URL object for this request
  */
-Alchemy.prototype._generateNiceUrl = function(query, method) {
+AlchemyAPI.prototype._generateNiceUrl = function(query, method) {
   var result = url.parse(url.format({
     protocol: this.config.protocol,
     hostname: this.config.api_url,
@@ -67,12 +67,12 @@ Alchemy.prototype._generateNiceUrl = function(query, method) {
 
 
 /**
- * Function to do a HTTP Get request with the current query
+ * Function to do a HTTP request with the current query
  * @param  {Object} request_query The current query object
  * @param  {Function} cb The callback function for the returned data
  * @return {void}
  */
-Alchemy.prototype._doRequest = function(request_query, cb) {
+AlchemyAPI.prototype._doRequest = function(request_query, cb) {
   // Pass the requested URL as an object to the get request
   //console.log(request_query.nice);
   
@@ -128,7 +128,7 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
  * @param  {String} str The URL string to be checked
  * @return {Boolean}
  */
-Alchemy.prototype._urlCheck = function(str) {
+AlchemyAPI.prototype._urlCheck = function(str) {
     var v = new RegExp();
     v.compile("^[A-Za-z]+://[A-Za-z0-9-_]+\\.[A-Za-z0-9-_%&\\?\/.=]+$");
     if (!v.test(str)) return false;
@@ -136,9 +136,11 @@ Alchemy.prototype._urlCheck = function(str) {
 };
 
 /**
- *
+ * Function to check if a passed string contains html (really just checking for tags <...>)
+ * @param  {String} str The text string to be checked
+ * @return {Boolean}
  */
-Alchemy.prototype._htmlCheck = function(str) {
+AlchemyAPI.prototype._htmlCheck = function(str) {
     var v = new RegExp();
     v.compile("<[A-Za-z][A-Za-z0-9][^>]*>");
 	//var v = new RegExp("</\?([a-z][a-z0-9]*)\b[^>]*>", "i");
@@ -149,16 +151,25 @@ Alchemy.prototype._htmlCheck = function(str) {
     return true;
 };
 
-Alchemy.prototype._getQuery = function(data, method) {
+/**
+ * Function to return request parameters based in the AlchemyAPI rest interface
+ * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
+ * @param  {String} method The Alchemy rest service method to call   
+ * @return {Object}
+ */
+AlchemyAPI.prototype._getQuery = function(data, method) {
 	var query = {};
 	query.url = {
 	     apikey: this.config.api_key
 	    ,outputMode: this.config.format
 	};
+	
 	query.data = data;
 	query.post = {};
 	query.apimethod = "HTML" + method;
+	
 	var httpMethod = "POST";
+	
 	if(this._urlCheck(data)){
 		query.apimethod = "URL" + method;
 		httpMethod = "GET";
@@ -183,40 +194,76 @@ Alchemy.prototype._getQuery = function(data, method) {
 	
 };
 
-Alchemy.prototype.sentiment = function(data, cb) {
+/**
+ * Function to return sentiment of the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
+ * @param  {Object} options Options to be passed to the AlchemyAPI (no options are currently supported) 
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.sentiment = function(data, options, cb) {
     this._doRequest(this._getQuery(data, "GetTextSentiment"), cb);
 };
 
-
-Alchemy.prototype.relations = function(data, cb) {
+/**
+ * Function to return relations in the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.relations = function(data, options, cb) {
 	this._doRequest(this._getQuery(data, "GetRelations"), cb);
 };
 
-
-Alchemy.prototype.concepts = function(data, cb) {
+/**
+ * Function to return concepts in the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.concepts = function(data, options, cb) {
 	this._doRequest(this._getQuery(data, "GetRankedConcepts"), cb);
 };
 
-
-Alchemy.prototype.entities = function(data, cb) {
+/**
+ * Function to return entities in the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.entities = function(data, options, cb) {
 	this._doRequest(this._getQuery(data, "GetRankedNamedEntities"), cb);
 };
 
-Alchemy.prototype.keywords = function(data, cb) {
+/**
+ * Function to return keywords in the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.keywords = function(data, options, cb) {
 	this._doRequest(this._getQuery(data, "GetRankedKeywords"), cb);
 };
 
-
-Alchemy.prototype.category = function(data, cb) {
+/**
+ * Function to return category of the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.category = function(data, options, cb) {
 	this._doRequest(this._getQuery(data, "GetCategory"), cb);
 };
 
-Alchemy.prototype.language = function(data, cb) {
+/**
+ * Function to return language of the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.language = function(data, options, cb) {
 	this._doRequest(this._getQuery(data, "GetLanguage"), cb);
 };
 
-
-Alchemy.prototype.author = function(data, cb) {
+/**
+ * Function to return author of the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url or html text
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.author = function(data, options, cb) {
 	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
 		cb(new Error('The author method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
 		return;
@@ -224,8 +271,12 @@ Alchemy.prototype.author = function(data, cb) {
 	this._doRequest(this._getQuery(data, "GetAuthor"), cb);
 };
 
-
-Alchemy.prototype.text = function(data, cb) {
+/**
+ * Function to return plain text of the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url or html text
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.text = function(data, options, cb) {
 	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
 		cb(new Error('The text method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
 		return;
@@ -233,7 +284,12 @@ Alchemy.prototype.text = function(data, cb) {
 	this._doRequest(this._getQuery(data, "GetText"), cb);
 };
 
-Alchemy.prototype.scrape = function(data, cb) {
+/**
+ * Function to return structured plain text of the data passed in retaining semantic meanings
+ * @param  {String} data The text to be passed to Alchemy can either a url or html text
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.scrape = function(data, options, cb) {
 	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
 		cb(new Error('The scrape method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
 		return;
@@ -245,4 +301,4 @@ Alchemy.prototype.scrape = function(data, cb) {
 
 
 // Export as main entry point in this module
-module.exports = Alchemy;
+module.exports = AlchemyAPI;
