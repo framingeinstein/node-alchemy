@@ -95,16 +95,21 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
             result = {'status_code': 500, 'status_text': 'JSON Parse Failed'};
           }
           cb(null, result);
-      });
+      })
+	 .on(:"error", function (err) {
+		cb(err, null);	
+	  });
 
   });
 
   req.on('socket', function(socket) {
         socket.on('error', function(err) {
             console.log('socket on error : ' + err);
-            //callback('socket error: ' + err);
-            //req.abort();
         });
+  });
+  
+  req.on("error", function (err) {
+		cb(err, null);
   });
 
   if(req.method == "POST") {

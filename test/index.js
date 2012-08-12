@@ -8,7 +8,7 @@ var testText ="I am very happy about the event at Nauticus this morning.  Paul R
 
 var apikey = "fcb11f5cebca4850ae9771ed0678ae4222d5733e";
 module.exports = {
-	/*
+	
 	'check html match': function(test) {
 			var alchemy = new Alchemy(apikey);
 		    var result = alchemy._htmlCheck(testHTML);			test.deepEqual(result, true);
@@ -102,7 +102,7 @@ module.exports = {
 			test.done();
 	    });
 	},
-	*/
+	
 	'get relations from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.relations(testHTML, function(error, result) {
@@ -111,7 +111,7 @@ module.exports = {
 			test.deepEqual(result.status, "OK");
 			test.done();
 		 });
-	 }/*,
+	 },
 	'get concepts from HTML': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.concepts(testHTML, function(error, result) {
@@ -248,5 +248,5 @@ module.exports = {
 				test.done();
 			});
 		 }	
-		*/
+		
 };
