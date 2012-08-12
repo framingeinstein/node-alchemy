@@ -99,10 +99,6 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
 
   });
 
-  req.on('error', function(e) {
-      cb(e);
-  });
-
   if(req.method == "POST") {
 		req.end(querystring.stringify(request_query.post));
   } else {
