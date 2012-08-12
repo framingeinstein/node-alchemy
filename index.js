@@ -75,7 +75,7 @@ Alchemy.prototype._generateNiceUrl = function(query, method) {
 Alchemy.prototype._doRequest = function(request_query, cb) {
   // Pass the requested URL as an object to the get request
   //console.log(request_query.nice);
-  var req = http.request(request_query.nice, function(res) {
+  var req = http.get(request_query.nice, function(res) {
      var data = [];
      res
       .on('data', function(chunk) { data.push(chunk); })
