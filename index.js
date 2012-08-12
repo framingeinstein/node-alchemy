@@ -75,7 +75,10 @@ Alchemy.prototype._generateNiceUrl = function(query, method) {
 Alchemy.prototype._doRequest = function(request_query, cb) {
   // Pass the requested URL as an object to the get request
   //console.log(request_query.nice);
-  var req = http.get(request_query.nice, function(res) {
+  
+  //var server = http.createClient(80, this.config.api_url);
+  console.log(JSON.stringify(request_query.nice));
+  var req = http.request(request_query.nice, function(res) {
      var data = [];
      res
       .on('data', function(chunk) { data.push(chunk); })
@@ -93,6 +96,9 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
           }
           cb(null, result);
       })
+	 .on("close", function () {
+			console.log("Connection Closed");	
+	  })
 	 .on("error", function (e) {
 			//console.log(e);
 			cb(e);
