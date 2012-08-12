@@ -99,6 +99,14 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
 
   });
 
+  req.on('socket', function(socket) {
+        socket.on('error', function(err) {
+            console.log('socket on error : ' + err);
+            //callback('socket error: ' + err);
+            //req.abort();
+        });
+  });
+
   if(req.method == "POST") {
 		req.end(querystring.stringify(request_query.post));
   } else {
