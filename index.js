@@ -84,7 +84,7 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
       .on('data', function(chunk) { data.push(chunk); })
       .on('end', function() {
           var urldata = data.join('').trim();
-		  //console.log(urldata);
+		  console.log(urldata);
           var result;
           try {
             result = JSON.parse(urldata);
@@ -95,14 +95,8 @@ Alchemy.prototype._doRequest = function(request_query, cb) {
             result = {'status_code': 500, 'status_text': 'JSON Parse Failed'};
           }
           cb(null, result);
-      })
-	 .on("close", function () {
-			console.log("Connection Closed");	
-	  })
-	 .on("error", function (e) {
-			//console.log(e);
-			cb(e);
-	  });
+      });
+
   });
 
   req.on('error', function(e) {
