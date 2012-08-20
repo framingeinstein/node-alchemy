@@ -29,7 +29,6 @@ To run tests type `npm test`
 
 AlchemyAPI Features
 ---------------
-This module does NOT support the optional parameters of the Alchemy API methods.  There is an options argument that will be utilized to enable these features in the future.
 
 Named Entity Extraction
 -----------------------
