@@ -22,7 +22,7 @@ module.exports = {
 		var alchemy = new Alchemy(apikey);
 	    alchemy.sentiment(testURL, {}, function(error, result) {
 			test.ifError(error);
-			console.log(result.docSentiment);
+			//console.log(result.docSentiment);
 			//test.deepEqual(result.status, "OK");
 			test.done();
 	    });

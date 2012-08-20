@@ -91,7 +91,7 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
   //console.log(request_query.nice);
   
   //var server = http.createClient(80, this.config.api_url);
-  console.log(JSON.stringify(request_query.nice));
+  //console.log(JSON.stringify(request_query.nice));
   var req = http.request(request_query.nice, function(res) {
      var data = [];
      res
@@ -106,7 +106,7 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
 			//console.log(request_query.nice.href);
 			//console.log(querystring.stringify(request_query.post));
 			//console.log(urldata);
-			console.log(urldata);
+			//console.log(urldata);
             result = {'status_code': 500, 'status_text': 'JSON Parse Failed'};
           }
 		  //console.log(result);
