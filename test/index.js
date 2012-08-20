@@ -5,32 +5,39 @@ var testURL = "http://www.nytimes.com/";
 var testHTML = '<html><head><title>Alchemy Test HTML</title><meta name="author" content="Jason Morgan" /></head><body><h1>Alchemy Test HTML</h1><p>This is something I am writing about.  I have to write this as I do not feel like getting it from the web.  So here it is.  A bunch of text to test the API with</p><div class="geo">GEO: <span class="latitude">37.386013</span>, <span class="longitude">-122.082932</span></div></body></html>';
 
 var testText ="This is something I am writing about.  I have to write this as I do not feel like getting it from the web.  So here it is.  A bunch of text to test the API with";
-
+			  //fcb11f5cebca4850ae9771ed0678ae4222d5733e
 var apikey = "fcb11f5cebca4850ae9771ed0678ae4222d5733e";
+
 module.exports = {
-	/*
+	
 	'check html match': function(test) {
 			var alchemy = new Alchemy(apikey);
-		    var result = alchemy._htmlCheck(testHTML);			test.deepEqual(result, true);
+		    var result = alchemy._htmlCheck(testHTML);
+			test.deepEqual(result, true);
 			test.done();
 		    
 	},
+	
 	'get sentiment from URL': function(test) {
 		var alchemy = new Alchemy(apikey);
 	    alchemy.sentiment(testURL, {}, function(error, result) {
 			test.ifError(error);
+			console.log(result.docSentiment);
 			//test.deepEqual(result.status, "OK");
 			test.done();
 	    });
 	},
+	
 	'get relations from URL': function(test) {
 		var alchemy = new Alchemy(apikey);
-		alchemy.relations(testURL, {}, function(error, result) {
+		alchemy.relations(testURL, {sentiment: 1}, function(error, result) {
+			console.log(result);
 			test.ifError(error);
 			//test.deepEqual(result.status, "OK");
 			test.done();
 		 });
-	 },
+	 }/*,
+	
 	'get concepts from URL': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.concepts(testURL, {}, function(error, result) {
@@ -247,7 +254,7 @@ module.exports = {
 				//test.deepEqual(result.status, "OK");
 				test.done();
 			});
-		 },*/
+		 },
 		'get microformats from HTML': function(test) {
 			var alchemy = new Alchemy(apikey);
 			alchemy.microformats(testHTML, {}, function(error, result) {
@@ -266,4 +273,5 @@ module.exports = {
 				test.done();
 			});
 		 }	
+		*/
 };

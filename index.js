@@ -8,19 +8,26 @@
 var url = require('url');
 var http = require('http');
 var querystring = require('querystring');
+var extend = require('./extend');
+
 //To install via NPM type the following: `npm install alchemy-api`
-var AlchemyAPI = function(api_key, options) {
-	options = options || {
+var AlchemyAPI = function(api_key, opts) {
+	var settings = {
 		 format: "json"
 		,api_url: "access.alchemyapi.com"
 		,protocol: "http"
 	};
+	
+	settings = extend(settings, opts);
 
 	this.config = {
-	    	 api_key: api_key
-	    	,format: options.format
-	    	,api_url: options.api_url
-		,protocol: options.protocol
+	    	 api_url: settings.api_url
+			,protocol: settings.protocol
+	};
+	
+	this.options = {
+	    apikey: api_key
+	   ,outputMode: settings.format		
 	};
 
 	return this;
@@ -57,13 +64,13 @@ AlchemyAPI.prototype._getPathFromMethod = function(method){
  * @param  {String} method The Alchemy API method to call with the request
  * @return {Object} The URL object for this request
  */
-AlchemyAPI.prototype._generateNiceUrl = function(query, method) {
+AlchemyAPI.prototype._generateNiceUrl = function(query, options, method) {
   var result = url.parse(url.format({
     protocol: this.config.protocol,
     hostname: this.config.api_url,
     pathname: '/calls' + this._getPathFromMethod(method) + '/' + method,
 	method: "POST",
-    query: query
+    query: options
   }));
   // HACK: Fixes the redirection issue in node 0.4.x
   if (!result.path) { result.path = result.pathname + result.search; }
@@ -91,7 +98,7 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
       .on('data', function(chunk) { data.push(chunk); })
       .on('end', function() {
           var urldata = data.join('').trim();
-		  console.log(urldata);
+		  //console.log(urldata);
           var result;
           try {
             result = JSON.parse(urldata);
@@ -99,29 +106,33 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
 			//console.log(request_query.nice.href);
 			//console.log(querystring.stringify(request_query.post));
 			//console.log(urldata);
+			console.log(urldata);
             result = {'status_code': 500, 'status_text': 'JSON Parse Failed'};
           }
 		  //console.log(result);
           cb(null, result);
       })
 	 .on("error", function (err) {
-		cb(err, null);	
+		//console.log('response error : ' + err);
+		cb(new Error("response.error: " + err), null);	
 	  });
 
   });
-
+  
   req.on('socket', function(socket) {
         socket.on('error', function(err) {
-            console.log('socket on error : ' + err);
+            console.log('socket error : ' + err);
+			//cb(new Error("socket.error: " + err), null)
         });
   });
   
   req.on("error", function (err) {
-		cb(err, null);
+		cb(new Error("request.error: " + err), null);
   });
 
   if(req.method == "POST") {
-		console.log(querystring.stringify(request_query.post));
+		//console.log("POSTING");
+		//console.log(querystring.stringify(request_query.post));
 		req.end(querystring.stringify(request_query.post));
   } else {
 		req.end();
@@ -166,13 +177,10 @@ AlchemyAPI.prototype._htmlCheck = function(str) {
  * @param  {String} method The Alchemy rest service method to call   
  * @return {Object}
  */
-AlchemyAPI.prototype._getQuery = function(data, method) {
+AlchemyAPI.prototype._getQuery = function(data, opts, method) {
 	var query = {};
-	query.url = {
-	     apikey: this.config.api_key
-	    ,outputMode: this.config.format
-	};
-	
+	console.log(this.options);
+	var options = extend(this.options, opts);
 	query.data = data;
 	query.post = {};
 	query.apimethod = "HTML" + method;
@@ -182,26 +190,28 @@ AlchemyAPI.prototype._getQuery = function(data, method) {
 	if(this._urlCheck(data)){
 		query.apimethod = "URL" + method;
 		httpMethod = "GET";
-		query.url.url = data;
-		
+		options.url = data;
+		query.headers = {
+			'content-length': '0'
+		}
 	} 
 	else if(!this._htmlCheck(data)){
 	    query.apimethod = "Text" + method;
 		query.post = {text: data};
 		query.headers = {
-			 'content-length': data.length
+			 'content-length': '' + data.length + ''
 			,'content-type': 'application/x-www-form-urlencoded'
 		};
 	} 
 	else {
 		query.post = {html: data};
 		query.headers = {
-			 'content-length': data.length
+			 'content-length': '' + data.length + ''
 			,'content-type': 'application/x-www-form-urlencoded'
 		};
 	}
 	
-	query.nice = this._generateNiceUrl(query.url, query.apimethod);
+	query.nice = this._generateNiceUrl(query.url, options, query.apimethod);
 	query.nice.method = httpMethod;
 	query.nice.headers = query.headers;
 	
@@ -216,7 +226,7 @@ AlchemyAPI.prototype._getQuery = function(data, method) {
  * @return {Object} 
  */
 AlchemyAPI.prototype.sentiment = function(data, options, cb) {
-    this._doRequest(this._getQuery(data, "GetTextSentiment"), cb);
+    this._doRequest(this._getQuery(data, options, "GetTextSentiment"), cb);
 };
 
 /**
@@ -225,7 +235,7 @@ AlchemyAPI.prototype.sentiment = function(data, options, cb) {
  * @return {Object} 
  */
 AlchemyAPI.prototype.relations = function(data, options, cb) {
-	this._doRequest(this._getQuery(data, "GetRelations"), cb);
+	this._doRequest(this._getQuery(data, options, "GetRelations"), cb);
 };
 
 /**
@@ -234,7 +244,7 @@ AlchemyAPI.prototype.relations = function(data, options, cb) {
  * @return {Object} 
  */
 AlchemyAPI.prototype.concepts = function(data, options, cb) {
-	this._doRequest(this._getQuery(data, "GetRankedConcepts"), cb);
+	this._doRequest(this._getQuery(data, options, "GetRankedConcepts"), cb);
 };
 
 /**
@@ -243,7 +253,7 @@ AlchemyAPI.prototype.concepts = function(data, options, cb) {
  * @return {Object} 
  */
 AlchemyAPI.prototype.entities = function(data, options, cb) {
-	this._doRequest(this._getQuery(data, "GetRankedNamedEntities"), cb);
+	this._doRequest(this._getQuery(data, options, "GetRankedNamedEntities"), cb);
 };
 
 /**
@@ -252,7 +262,7 @@ AlchemyAPI.prototype.entities = function(data, options, cb) {
  * @return {Object} 
  */
 AlchemyAPI.prototype.keywords = function(data, options, cb) {
-	this._doRequest(this._getQuery(data, "GetRankedKeywords"), cb);
+	this._doRequest(this._getQuery(data, options, "GetRankedKeywords"), cb);
 };
 
 /**
@@ -261,7 +271,7 @@ AlchemyAPI.prototype.keywords = function(data, options, cb) {
  * @return {Object} 
  */
 AlchemyAPI.prototype.category = function(data, options, cb) {
-	this._doRequest(this._getQuery(data, "GetCategory"), cb);
+	this._doRequest(this._getQuery(data, options, "GetCategory"), cb);
 };
 
 /**
@@ -270,7 +280,7 @@ AlchemyAPI.prototype.category = function(data, options, cb) {
  * @return {Object} 
  */
 AlchemyAPI.prototype.language = function(data, options, cb) {
-	this._doRequest(this._getQuery(data, "GetLanguage"), cb);
+	this._doRequest(this._getQuery(data, options, "GetLanguage"), cb);
 };
 
 /**
@@ -283,7 +293,7 @@ AlchemyAPI.prototype.author = function(data, options, cb) {
 		cb(new Error('The author method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
 		return;
 	}
-	this._doRequest(this._getQuery(data, "GetAuthor"), cb);
+	this._doRequest(this._getQuery(data, options, "GetAuthor"), cb);
 };
 
 /**
@@ -296,7 +306,7 @@ AlchemyAPI.prototype.text = function(data, options, cb) {
 		cb(new Error('The text method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
 		return;
 	}
-	this._doRequest(this._getQuery(data, "GetText"), cb);
+	this._doRequest(this._getQuery(data, options, "GetText"), cb);
 };
 
 /**
@@ -309,7 +319,7 @@ AlchemyAPI.prototype.scrape = function(data, options, cb) {
 		cb(new Error('The scrape method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
 		return;
 	}
-	this._doRequest(this._getQuery(data, "GetConstraintQuery"), cb);
+	this._doRequest(this._getQuery(data, options, "GetConstraintQuery"), cb);
 };
 
 /**
@@ -322,7 +332,7 @@ AlchemyAPI.prototype.microformats = function(data, options, cb) {
 		cb(new Error('The microformats method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
 		return;
 	}
-	this._doRequest(this._getQuery(data, "GetMicroformatData"), cb);
+	this._doRequest(this._getQuery(data, options, "GetMicroformatData"), cb);
 };
 
 /**
@@ -335,7 +345,7 @@ AlchemyAPI.prototype.feeds = function(data, options, cb) {
 		cb(new Error('The feeds method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
 		return;
 	}
-	this._doRequest(this._getQuery(data, "GetFeedLinks"), cb);
+	this._doRequest(this._getQuery(data, options, "GetFeedLinks"), cb);
 };
 
 // Export as main entry point in this module
