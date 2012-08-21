@@ -179,7 +179,7 @@ AlchemyAPI.prototype._htmlCheck = function(str) {
  */
 AlchemyAPI.prototype._getQuery = function(data, opts, method) {
 	var query = {};
-	console.log(this.options);
+	//console.log(this.options);
 	var options = extend(this.options, opts);
 	query.data = data;
 	query.post = {};
