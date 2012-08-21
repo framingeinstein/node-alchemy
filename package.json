@@ -2,7 +2,7 @@
   "name": "alchemy-api",
   "description": "An Alchemy API library for Node.js",
   "tags": ["Alchemy", "Natural Language Processing", "util"],
-  "version": "0.8.0",
+  "version": "0.8.5",
   "author": "Jason Morgan <jason@framingeinstein.com>",
   "contributors": [
   ],
