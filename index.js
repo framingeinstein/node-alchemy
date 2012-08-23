@@ -121,7 +121,7 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
   
   req.on('socket', function(socket) {
         socket.on('error', function(err) {
-            console.log('socket error : ' + err);
+            //console.log('socket error : ' + err);
 			//cb(new Error("socket.error: " + err), null)
         });
   });
