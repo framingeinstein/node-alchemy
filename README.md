@@ -7,7 +7,7 @@ For more information on the API request and responses visit the [Alchemy API doc
 
 Installation
 ------------
-You can install this through npm: npm install alchemy-api
+You can install this through npm: npm install alchemy-api</br>
 You can also install via git by cloning: `git clone https://github.com/framingeinstein/node-alchemy.git /path/to/alchemy-api`
 
 Usage
@@ -32,7 +32,7 @@ AlchemyAPI Features
 
 Named Entity Extraction
 -----------------------
- 	var AlchemyAPI = require('alchemy-api');
+    var AlchemyAPI = require('alchemy-api');
     var alchemy = new AlchemyAPI('<YOUR API KEY>');
     alchemy.entities('<URL|HTML|TEXT>', {}, function(err, response) {
       if (err) throw err;
