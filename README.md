@@ -7,7 +7,8 @@ For more information on the API request and responses visit the [Alchemy API doc
 
 Installation
 ------------
-You can install this through npm: npm install alchemy-api</br>
+You can install this through npm: npm install alchemy-api
+
 You can also install via git by cloning: `git clone https://github.com/framingeinstein/node-alchemy.git /path/to/alchemy-api`
 
 Usage
