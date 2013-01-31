@@ -91,7 +91,7 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
   //console.log(request_query.nice);
   
   //var server = http.createClient(80, this.config.api_url);
-  //console.log(JSON.stringify(request_query.nice));
+  //console.log(request_query.nice.path);
   var req = http.request(request_query.nice, function(res) {
      var data = [];
      res
@@ -316,7 +316,7 @@ AlchemyAPI.prototype.text = function(data, options, cb) {
  */
 AlchemyAPI.prototype.scrape = function(data, options, cb) {
 	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
-		cb(new Error('The scrape method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
+		cb(new Error('The scrape method can only use a URL or HTML encoded text.  Plain text is not supported.'), null);
 		return;
 	}
 	this._doRequest(this._getQuery(data, options, "GetConstraintQuery"), cb);
