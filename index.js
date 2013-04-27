@@ -118,7 +118,8 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
 	  });
 
   });
-  
+  //console.dir(req);
+  //req.setEncoding("utf8");
   req.on('socket', function(socket) {
         socket.on('error', function(err) {
             //console.log('socket error : ' + err);
@@ -131,9 +132,16 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
   });
 
   if(req.method == "POST") {
-		//console.log("POSTING");
-		//console.log(querystring.stringify(request_query.post));
-		req.end(querystring.stringify(request_query.post));
+
+		/*
+			Removed this because JSON.stringify was causing issue with unicode characters
+			//console.log(querystring.stringify(request_query.post));
+		*/
+		if (request_query.post.text) {
+			req.end("text=" + request_query.post.text);
+		} else if (request_query.post.html) {
+			req.end("html=" + request_query.post.text);
+		}
   } else {
 		req.end();
   }
@@ -194,14 +202,16 @@ AlchemyAPI.prototype._getQuery = function(data, opts, method) {
 		query.headers = {
 			'content-length': '0'
 		}
+		//console.log("======================1==================");
 	} 
 	else if(!this._htmlCheck(data)){
 	    query.apimethod = "Text" + method;
 		query.post = {text: data};
 		query.headers = {
 			 'content-length': '' + data.length + ''
-			,'content-type': 'application/x-www-form-urlencoded'
+			,'content-type': 'multipart/form-data'
 		};
+		//console.log("======================2==================");
 	} 
 	else {
 		query.post = {html: data};
@@ -209,6 +219,7 @@ AlchemyAPI.prototype._getQuery = function(data, opts, method) {
 			 'content-length': '' + data.length + ''
 			,'content-type': 'application/x-www-form-urlencoded'
 		};
+		//console.log("======================3==================");
 	}
 	
 	query.nice = this._generateNiceUrl(query.url, options, query.apimethod);

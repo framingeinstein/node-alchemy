@@ -60,6 +60,26 @@ module.exports = {
 			test.done();
 		});
 	 },
+	'get russian keywords': function(test) {
+		var alchemy = new Alchemy(apikey);
+		alchemy.keywords("http://www.framingeinstein.com/russian.html", {}, function(error, result) {
+			//console.log(result);
+			test.ifError(error);
+			//test.deepEqual(result.status, "OK");
+			test.done();
+		});
+	 },
+	'get russian keywords from text': function(test) {
+			var alchemy = new Alchemy(apikey);
+			var text = "сервис, который поможет все успеть и ничего не пропустить Создание событий добавьте в календарь напоминание о фильме или концерте или создавайте напоминания о своих делах Оповещение настройте оповещение и календарь предупредит вас Используйте другие службы Яндекса добавляйте события из Телепрограммы или Афиши";
+			alchemy.keywords(text, {}, function(error, result) {
+				//console.log(result);
+				test.ifError(error);
+				//test.deepEqual(result.status, "OK");
+				test.done();
+			});
+		 },
+		
 	'get category': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.category(testURL, {}, function(error, result) {
