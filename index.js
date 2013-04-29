@@ -132,16 +132,7 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
   });
 
   if(req.method == "POST") {
-
-		/*
-			Removed this because JSON.stringify was causing issue with unicode characters
-			//console.log(querystring.stringify(request_query.post));
-		*/
-		if (request_query.post.text) {
-			req.end("text=" + request_query.post.text);
-		} else if (request_query.post.html) {
-			req.end("html=" + request_query.post.text);
-		}
+		req.end(querystring.stringify(request_query.post));
   } else {
 		req.end();
   }
@@ -208,9 +199,10 @@ AlchemyAPI.prototype._getQuery = function(data, opts, method) {
 	    query.apimethod = "Text" + method;
 		query.post = {text: data};
 		query.headers = {
-			 'content-length': '' + data.length + ''
-			,'content-type': 'multipart/form-data'
+			 'content-length': '' + querystring.stringify(query.post).length + ''
+			,'content-type': 'application/x-www-form-urlencoded'
 		};
+		//console.log(querystring.stringify(query.post).length);
 		//console.log("======================2==================");
 	} 
 	else {
