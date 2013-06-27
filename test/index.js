@@ -36,7 +36,7 @@ module.exports = {
 	'get concepts': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.concepts(testURL, {}, function(error, result) {
-			
+			console.log(result);
 			test.ifError(error);
 			//test.deepEqual(result.status, "OK");
 			test.done();
@@ -45,7 +45,7 @@ module.exports = {
 	'get entities': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.entities(testURL, {}, function(error, result) {
-			
+			console.log(result);
 			test.ifError(error);
 			//test.deepEqual(result.status, "OK");
 			test.done();
@@ -54,7 +54,7 @@ module.exports = {
 	'get keywords': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.keywords(testURL, {}, function(error, result) {
-			
+			console.log(result);
 			test.ifError(error);
 			//test.deepEqual(result.status, "OK");
 			test.done();
@@ -63,7 +63,7 @@ module.exports = {
 	'get russian keywords': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.keywords("http://www.framingeinstein.com/russian.html", {}, function(error, result) {
-			//console.log(result);
+			console.log(result);
 			test.ifError(error);
 			//test.deepEqual(result.status, "OK");
 			test.done();

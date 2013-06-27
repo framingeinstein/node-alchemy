@@ -2,8 +2,8 @@
 ====================
 [![Build Status](https://secure.travis-ci.org/framingeinstein/node-alchemy.png)](http://travis-ci.org/framingeinstein/node-alchemy)
 
-This module provides calls to the [Alchemy](http://www.alchemyapi.com/) API for [Nodejs](http://nodejs.org).
-For more information on the API request and responses visit the [Alchemy API docs](http://www.alchemyapi.com/api/).  To use the module you will need to obtain an api key from [Alchemy](http://www.alchemyapi.com/api/register.html).
+This module provides calls to the [AlchemyAPI](http://www.alchemyapi.com/) for [Nodejs](http://nodejs.org).
+For more information on the API request and responses visit the [AlchemyAPI docs](http://www.alchemyapi.com/api/).  To use the module you will need to obtain an api key from [Alchemy](http://www.alchemyapi.com/api/register.html).
 
 Installation
 ------------

@@ -118,14 +118,6 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
 	  });
 
   });
-  //console.dir(req);
-  //req.setEncoding("utf8");
-  req.on('socket', function(socket) {
-        socket.on('error', function(err) {
-            //console.log('socket error : ' + err);
-			//cb(new Error("socket.error: " + err), null)
-        });
-  });
   
   req.on("error", function (err) {
 		cb(new Error("request.error: " + err), null);
