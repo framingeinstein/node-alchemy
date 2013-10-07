@@ -136,5 +136,14 @@ module.exports = {
 			//test.deepEqual(result.status, "OK");
 			test.done();
 		});
-	 }
+	 },
+	'small positive text': function(test){
+			var alchemy = new Alchemy(apikey);
+		    alchemy.sentiment("This is awesome", {}, function(error, result) {
+				test.ifError(error);
+				//console.log(result.docSentiment);
+				test.deepEqual(result.docSentiment.type, "positive");
+				test.done();
+		    });
+	}
 };
