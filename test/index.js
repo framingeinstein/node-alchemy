@@ -97,7 +97,7 @@ module.exports = {
 			//test.deepEqual(result.status, "OK");
 			test.done();
 		});
-	 },
+	 },/*
 	'get author': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.author(testURL, {}, function(error, result) {
@@ -107,7 +107,7 @@ module.exports = {
 			//test.deepEqual(result.status, "OK");
 			test.done();
 		});
-	 },
+	 },*/
 	'scrape text': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.scrape(testURL, {cquery:"all readme"}, function(error, result) {
