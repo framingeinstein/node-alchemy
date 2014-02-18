@@ -200,7 +200,7 @@ AlchemyAPI.prototype._getQuery = function(data, opts, method) {
 	else {
 		query.post = {html: data};
 		query.headers = {
-			 'content-length': '' + data.length + ''
+			 'content-length': '' + querystring.stringify(query.post).length + ''
 			,'content-type': 'application/x-www-form-urlencoded'
 		};
 		//console.log("======================3==================");
