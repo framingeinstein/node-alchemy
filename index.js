@@ -140,10 +140,8 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
  * @return {Boolean}
  */
 AlchemyAPI.prototype._urlCheck = function(str) {
-    var v = new RegExp();
-    v.compile("^[A-Za-z]+://[A-Za-z0-9-_]+\\.[A-Za-z0-9-_%&\\?\/.=]+$");
-    if (!v.test(str)) return false;
-    return true;
+    var parsed = url.parse(str)
+    return (!!parsed.hostname && !!parsed.protocol && str.indexOf(' ') < 0);
 };
 
 /**

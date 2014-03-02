@@ -15,6 +15,14 @@ module.exports = {
 			test.done();
 		    
 	},
+	'check url match': function(test){
+		var alchemy = new Alchemy(apikey);
+		test.equal(alchemy._urlCheck(testURL), true);
+		test.equal(alchemy._urlCheck(testHTML), false);
+		test.equal(alchemy._urlCheck("http://feedproxy.google.com/~r/nmecom/rss/newsxml/~3/oAtTtYbCpl0/story01.htm"), true);
+		test.equal(alchemy._urlCheck('http://google.com is my favorite site ever'), false);
+		test.done();
+	},
 	'get sentiment': function(test) {
 		var alchemy = new Alchemy(apikey);
 	    alchemy.sentiment(testURL, {}, function(error, result) {
