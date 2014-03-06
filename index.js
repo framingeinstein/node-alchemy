@@ -341,5 +341,17 @@ AlchemyAPI.prototype.feeds = function(data, options, cb) {
 	this._doRequest(this._getQuery(data, options, "GetFeedLinks"), cb);
 };
 
+/**
+ * Function to return the title found in a URL or html text passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url or html text
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.title = function(data, options, cb) {
+	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
+		cb(new Error('The text method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
+		return;
+	}
+	this._doRequest(this._getQuery(data, options, "GetTitle"), cb);
+};
 // Export as main entry point in this module
 module.exports = AlchemyAPI;
