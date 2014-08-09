@@ -96,6 +96,19 @@ Keyword / Terminology Extraction
       // Do something with data
     });
 
+Taxonomy
+---------------
+    var AlchemyAPI = require('alchemy-api');
+    var alchemy = new AlchemyAPI('<YOUR API KEY>');
+    alchemy.taxonomy('<URL|HTML|TEXT>', {}, function(err, response) {
+      if (err) throw err;
+
+      // See http://www.alchemyapi.com/api/taxonomy_calls/html.html for format of returned object
+      var taxonomy = response.taxonomy;
+
+      // Do something with data
+    });
+
 Topic Categorization
 ---------------
     var AlchemyAPI = require('alchemy-api');
@@ -105,6 +118,32 @@ Topic Categorization
 
       // See http://www.alchemyapi.com/api/categ/htmlc.html for format of returned object
       var category = response.category;
+
+      // Do something with data
+    });
+
+Image Link Extraction (Main Image)
+---------------
+    var AlchemyAPI = require('alchemy-api');
+    var alchemy = new AlchemyAPI('<YOUR API KEY>');
+    alchemy.imageLink('<URL|HTML|TEXT>', {}, function(err, response) {
+      if (err) throw err;
+
+      // See http://www.alchemyapi.com/api/image-link-extraction/htmlc.html for format of returned object
+      var image = response.image;
+
+      // Do something with data
+    });
+
+Image Tags/Keyword Extraction
+---------------
+    var AlchemyAPI = require('alchemy-api');
+    var alchemy = new AlchemyAPI('<YOUR API KEY>');
+    alchemy.imageKeywords('<URL|HTML|TEXT>', {}, function(err, response) {
+      if (err) throw err;
+
+      // See http://www.alchemyapi.com/api/image-tagging/urls.html for format of returned object
+      var imageKeywords = response.imageKeywords;
 
       // Do something with data
     });
@@ -183,6 +222,19 @@ RSS / ATOM Feed Discovery
 
       // See http://www.alchemyapi.com/api/feed/htmlc.html for format of returned object
       var feeds = response.feeds;
+
+      // Do something with data
+    });
+
+Publication Date
+----------
+    var AlchemyAPI = require('alchemy-api');
+    var alchemy = new AlchemyAPI('<YOUR API KEY>');
+    alchemy.publicationDate('<URL|HTML>', {}, function(err, response) {
+      if (err) throw err;
+
+      // See http://www.alchemyapi.com/api/publication-date/htmlc.html for format of returned object
+      var publicationDate = response.publicationDate; //YYYYMMDDTHHMMSS string
 
       // Do something with data
     });
