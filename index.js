@@ -98,18 +98,18 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
       .on('data', function(chunk) { data.push(chunk); })
       .on('end', function() {
           var urldata = data.join('').trim();
-		  //console.log(urldata);
+	  //console.log(urldata);
           var result;
           try {
             result = JSON.parse(urldata);
           } catch (exp) {
-			//console.log(request_query.nice.href);
-			//console.log(querystring.stringify(request_query.post));
-			//console.log(urldata);
-			//console.log(urldata);
+		//console.log(request_query.nice.href);
+		//console.log(querystring.stringify(request_query.post));
+		//console.log(urldata);
+		//console.log(urldata);
             result = {'status_code': 500, 'status_text': 'JSON Parse Failed'};
           }
-		  //console.log(result);
+	  //console.log(result);
           cb(null, result);
       })
 	 .on("error", function (err) {
@@ -152,11 +152,7 @@ AlchemyAPI.prototype._urlCheck = function(str) {
 AlchemyAPI.prototype._htmlCheck = function(str) {
     var v = new RegExp();
     v.compile("<[A-Za-z][A-Za-z0-9][^>]*>");
-	//var v = new RegExp("</\?([a-z][a-z0-9]*)\b[^>]*>", "i");
-	//var v = //
-	//console.log(v.test(str));
-	//console.log(str);
-	if (!v.test(str)) return false;
+    if (!v.test(str)) return false;
     return true;
 };
 
@@ -192,7 +188,6 @@ AlchemyAPI.prototype._getQuery = function(data, opts, method) {
 			 'content-length': '' + querystring.stringify(query.post).length + ''
 			,'content-type': 'application/x-www-form-urlencoded'
 		};
-		//console.log(querystring.stringify(query.post).length);
 		//console.log("======================2==================");
 	} 
 	else {
@@ -259,12 +254,47 @@ AlchemyAPI.prototype.keywords = function(data, options, cb) {
 };
 
 /**
+ * Function to return taxonomies in the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.taxonomies = function(data, options, cb) {
+	this._doRequest(this._getQuery(data, options, "GetRankedTaxonomy"), cb);
+};
+
+/**
  * Function to return category of the data passed in
  * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
  * @return {Object} 
  */
 AlchemyAPI.prototype.category = function(data, options, cb) {
 	this._doRequest(this._getQuery(data, options, "GetCategory"), cb);
+};
+
+/**
+ * Function to return image links of the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url, html text
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.imageLink = function(data, options, cb) {
+	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
+		cb(new Error('The imageLinks method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
+		return;
+	}
+	this._doRequest(this._getQuery(data, options, "GetImage"), cb);
+};
+
+/**
+ * Function to return image keywords of the data passed in
+ * @param  {String} data The text to be passed to Alchemy should be a url of a image
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.imageKeywords = function(data, options, cb) {
+	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
+		cb(new Error('The imageTags method can only be used with a URL. HTML encoded text and plain text is not supported.'), null);
+		return;
+	}
+	this._doRequest(this._getQuery(data, options, "GetRankedImageKeywords"), cb);
 };
 
 /**
@@ -287,6 +317,19 @@ AlchemyAPI.prototype.author = function(data, options, cb) {
 		return;
 	}
 	this._doRequest(this._getQuery(data, options, "GetAuthor"), cb);
+};
+
+/**
+ * Function to return publication date of the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url or html text
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.publicationDate = function(data, options, cb) {
+	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
+		cb(new Error('The publicationDate method can only be used a URL or HTML encoded text.  Plain text is not supported.'), null);
+		return;
+	}
+	this._doRequest(this._getQuery(data, options, "GetPubDate"), cb);
 };
 
 /**
@@ -353,5 +396,6 @@ AlchemyAPI.prototype.title = function(data, options, cb) {
 	}
 	this._doRequest(this._getQuery(data, options, "GetTitle"), cb);
 };
+
 // Export as main entry point in this module
 module.exports = AlchemyAPI;
