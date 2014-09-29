@@ -14,9 +14,6 @@
 		var clonedArray = Extend(true, [], ['a',['b','c',['d']]]);
 */
 
-/*
-Hello
-*/
  
 var toString = Object.prototype.toString,
 	hasOwn = Object.prototype.hasOwnProperty,
