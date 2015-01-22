@@ -100,11 +100,11 @@ Taxonomy
 ---------------
     var AlchemyAPI = require('alchemy-api');
     var alchemy = new AlchemyAPI('<YOUR API KEY>');
-    alchemy.taxonomy('<URL|HTML|TEXT>', {}, function(err, response) {
+    alchemy.taxonomies('<URL|HTML|TEXT>', {}, function(err, response) {
       if (err) throw err;
 
       // See http://www.alchemyapi.com/api/taxonomy_calls/html.html for format of returned object
-      var taxonomy = response.taxonomy;
+      var taxonomies = response.taxonomies;
 
       // Do something with data
     });
