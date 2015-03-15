@@ -208,6 +208,28 @@ AlchemyAPI.prototype._getQuery = function(data, opts, method) {
 };
 
 /**
+ * Function to return the API key usage information
+ * @param  {Object} options Options to be passed to the AlchemyAPI (no options are currently supported)
+ * @param cb
+ */
+AlchemyAPI.prototype.apiKeyInfo = function(options, cb) {
+	// Since this request is nothing like the others, build it manually
+	var opts = extend(this.options, opts),
+		query = {
+			data: "",
+			post: {},
+			apimethod: "info/GetAPIKeyInfo",
+			headers: {
+				"content-length": 0
+			}
+		};
+	query.nice = this._generateNiceUrl(null, opts, query.apimethod)
+	query.nice.method = "GET";
+	query.nice.headers = query.headers;
+	this._doRequest(query, cb)
+};
+
+/**
  * Function to return sentiment of the data passed in
  * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
  * @param  {Object} options Options to be passed to the AlchemyAPI (no options are currently supported) 

@@ -23,6 +23,19 @@ module.exports = {
 		test.equal(alchemy._urlCheck('http://google.com is my favorite site ever'), false);
 		test.done();
 	},
+	'get api key info': function(test) {
+		var alchemy = new Alchemy(apikey);
+		alchemy.apiKeyInfo({}, function(error, result) {
+			test.ifError(error);
+			test.ok(result);
+			test.ok(result.hasOwnProperty('status'));
+			test.ok(result.hasOwnProperty('consumedDailyTransactions'));
+			test.ok(result.hasOwnProperty('dailyTransactionLimit'));
+			//console.log(result.docSentiment);
+			//test.deepEqual(result.status, "OK");
+			test.done();
+		});
+	},
 	'get sentiment': function(test) {
 		var alchemy = new Alchemy(apikey);
 	        alchemy.sentiment(testURL, {}, function(error, result) {
