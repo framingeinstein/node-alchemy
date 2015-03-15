@@ -238,3 +238,15 @@ Publication Date
 
       // Do something with data
     });
+    
+API Key Information
+----------
+    var AlchemyAPI = require('alchemy-api');
+    var alchemy = new AlchemyAPI('<YOUR API KEY>');
+    alchemy.apiKeyInfo({}, function(err, response) {
+      if (err) throw err;
+
+      // Do something with data
+      console.log('Status:', response.status, 'Consumed:', response.consumedDailyTransactions, 'Limit:', response.dailyTransactionLimit);
+      
+    });
