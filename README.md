@@ -57,6 +57,19 @@ Sentiment Analysis
       // Do something with data
     });
 
+Targeted Sentiment Analysis
+------------------
+    var AlchemyAPI = require('alchemy-api');
+    var alchemy = new AlchemyAPI('<YOUR API KEY>');
+    alchemy.sentiment_targeted('<URL|HTML|TEXT>', '<Target>', {}, function(err, response) {
+      if (err) throw err;
+
+      // See http://www.alchemyapi.com/api/sentiment/htmlc.html for format of returned object
+      var sentiment = response.docSentiment;
+
+      // Do something with data
+    });
+
 Relation Extraction
 -------------------
     var AlchemyAPI = require('alchemy-api');

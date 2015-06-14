@@ -45,6 +45,26 @@ module.exports = {
 			test.done();
 	        });
 	},
+	'get sentiment_targeted': function(test) {
+		var alchemy = new Alchemy(apikey);
+	        alchemy.sentiment_targeted("Guy Somethington is an candidate but Hillary is not", "Guy Somethington", {}, function(error, result) {
+			test.ifError(error);
+
+			//console.log(result);
+			test.deepEqual(result.docSentiment.type, "positive");
+			test.done();
+	        });
+	},
+	'get sentiment_targeted 2': function(test) {
+		var alchemy = new Alchemy(apikey);
+	        alchemy.sentiment_targeted("Guy Somethington is an awesome candidate but Billary is not", "Billary", {}, function(error, result) {
+			test.ifError(error);
+			test.deepEqual(result.docSentiment.type, "negative");
+			//console.log(result);
+			//test.deepEqual(result.status, "OK");
+			test.done();
+	        });
+	},
 	'get relations': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.relations(testURL, {sentiment: 1}, function(error, result) {

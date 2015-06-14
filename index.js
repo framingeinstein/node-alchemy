@@ -236,9 +236,15 @@ AlchemyAPI.prototype.apiKeyInfo = function(options, cb) {
  * @return {Object} 
  */
 AlchemyAPI.prototype.sentiment = function(data, options, cb) {
-    this._doRequest(this._getQuery(data, options, "GetTextSentiment"), cb);
+	this._doRequest(this._getQuery(data, options, "GetTextSentiment"), cb);
 };
 
+AlchemyAPI.prototype.sentiment_targeted = function(data, target, options, cb) {
+	if(typeof target !== 'Object'){
+		options.target = target;
+	}
+    this._doRequest(this._getQuery(data, options, "GetTargetedSentiment"), cb);
+};
 /**
  * Function to return relations in the data passed in
  * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
