@@ -9,6 +9,7 @@ var url = require('url');
 var http = require('http');
 var querystring = require('querystring');
 var extend = require('./extend');
+var imageType = require('image-type');
 
 //To install via NPM type the following: `npm install alchemy-api`
 var AlchemyAPI = function(api_key, opts) {
@@ -124,7 +125,7 @@ AlchemyAPI.prototype._doRequest = function(request_query, cb) {
   });
 
   if(req.method == "POST") {
-		req.end(querystring.stringify(request_query.post));
+		req.end(request_query.post.image ? request_query.post.image : querystring.stringify(request_query.post));
   } else {
 		req.end();
   }
@@ -157,6 +158,15 @@ AlchemyAPI.prototype._htmlCheck = function(str) {
 };
 
 /**
+ * Function to check if a passed value is a valid byte stream 
+ * @param  {Byte} data Image byte stream
+ * @return {Boolean}
+ */
+AlchemyAPI.prototype._imageCheck = function(data) {
+  return data instanceof Buffer && imageType(data) !== null;
+};
+
+/**
  * Function to return request parameters based in the AlchemyAPI rest interface
  * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
  * @param  {String} method The Alchemy rest service method to call   
@@ -171,8 +181,15 @@ AlchemyAPI.prototype._getQuery = function(data, opts, method) {
 	query.apimethod = "HTML" + method;
 	
 	var httpMethod = "POST";
-	
-	if(this._urlCheck(data)){
+	if(this._imageCheck(data)) {
+		query.apimethod = "image/Image" + method;
+                query.post = {image: data};
+		query.headers = {
+			 'content-length': data.length
+			,'content-type': imageType(data).mime
+		};
+        }
+	else if(this._urlCheck(data)){
 		query.apimethod = "URL" + method;
 		httpMethod = "GET";
 		options.url = data;
@@ -318,11 +335,28 @@ AlchemyAPI.prototype.imageLink = function(data, options, cb) {
  * @return {Object} 
  */
 AlchemyAPI.prototype.imageKeywords = function(data, options, cb) {
-	if (!this._urlCheck(data) && !this._htmlCheck(data)) {
-		cb(new Error('The imageTags method can only be used with a URL. HTML encoded text and plain text is not supported.'), null);
+	if (!this._imageCheck(data) && !this._urlCheck(data)) {
+		cb(new Error('The imageKeywords method can only be used with a URL or a raw byte stream. HTML encoded text and plain text is not supported.'), null);
 		return;
 	}
+
+        options.imagePostMode = 'raw';
 	this._doRequest(this._getQuery(data, options, "GetRankedImageKeywords"), cb);
+};
+
+/**
+ * Function to detect faces in an image from the data passed in
+ * @param  {String} data URL pointing to an image or the raw images bytes
+ * @return {Object} 
+ */
+AlchemyAPI.prototype.imageFaces = function(data, options, cb) {
+	if (!this._imageCheck(data) && !this._urlCheck(data)) {
+		cb(new Error('The imageFaces method can only be used with a URL or a raw byte stream. HTML encoded text and plain text is not supported.'), null);
+		return;
+	}
+
+        options.imagePostMode = 'raw';
+	this._doRequest(this._getQuery(data, options, "GetRankedImageFaceTags"), cb);
 };
 
 /**
@@ -423,6 +457,21 @@ AlchemyAPI.prototype.title = function(data, options, cb) {
 		return;
 	}
 	this._doRequest(this._getQuery(data, options, "GetTitle"), cb);
+};
+
+/**
+ * Function to run combined feature extraction from the URL, HTML or Text that is passed in.
+ * @param  {String} data The text to be passed to Alchemy can either a url, html or raw text
+ * @return {Array} extract List of API features to be analysed on the input data. For valid feature names, see: http://www.alchemyapi.com/api/combined/urls.html
+ * @return {Object} options Custom request parameters that are passed to the Alchemy API 
+ */
+AlchemyAPI.prototype.combined = function(data, extract, options, cb) {
+	if (!extract.length) {
+		cb(new Error('The extract parameter must contain at least ONE feature.'), null);
+		return;
+	}
+        options.extract = extract.join(",");
+	this._doRequest(this._getQuery(data, options, "GetCombinedData"), cb);
 };
 
 // Export as main entry point in this module
