@@ -61,7 +61,7 @@ Targeted Sentiment Analysis
 ------------------
     var AlchemyAPI = require('alchemy-api');
     var alchemy = new AlchemyAPI('<YOUR API KEY>');
-    alchemy.sentiment_targeted('<URL|HTML|TEXT>', '<Target>', function(err, response) {
+    alchemy.sentiment_targeted('<URL|HTML|TEXT>', '<Target>', {}, function(err, response) {
       if (err) throw err;
 
       // See http://www.alchemyapi.com/api/sentiment/htmlc.html for format of returned object
