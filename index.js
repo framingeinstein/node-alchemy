@@ -7,6 +7,7 @@
 
 var url = require('url');
 var http = require('http');
+var https = require('https');
 var querystring = require('querystring');
 var extend = require('./extend');
 var imageType = require('image-type');
@@ -90,10 +91,11 @@ AlchemyAPI.prototype._generateNiceUrl = function(query, options, method) {
 AlchemyAPI.prototype._doRequest = function(request_query, cb) {
   // Pass the requested URL as an object to the get request
   //console.log(request_query.nice);
+  var http_protocol = (request_query.nice.protocol === 'https:') ? https : http;
   
   //var server = http.createClient(80, this.config.api_url);
   //console.log(request_query.nice.path);
-  var req = http.request(request_query.nice, function(res) {
+  var req = http_protocol.request(request_query.nice, function(res) {
      var data = [];
      res
       .on('data', function(chunk) { data.push(chunk); })
