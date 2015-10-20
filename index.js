@@ -16,7 +16,7 @@ var imageType = require('image-type');
 var AlchemyAPI = function(api_key, opts) {
 	var settings = {
 		 format: "json"
-		,api_url: "access.alchemyapi.com"
+		,api_url: "gateway-a.watsonplatform.net"
 		,protocol: "http"
 	};
 	
