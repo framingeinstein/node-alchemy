@@ -83,6 +83,15 @@ module.exports = {
 			test.done();
 		 });
 	 },
+	'get emotions': function(test) {
+		var alchemy = new Alchemy(apikey);
+		alchemy.emotions(testURL, {}, function(error, result) {
+			//console.log(result);
+			test.ifError(error);
+			//test.deepEqual(result.status, "OK");
+			test.done();
+		 });
+	 },
 	'get entities': function(test) {
 		var alchemy = new Alchemy(apikey);
 		alchemy.entities(testURL, {}, function(error, result) {

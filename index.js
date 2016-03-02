@@ -314,6 +314,15 @@ AlchemyAPI.prototype.taxonomies = function(data, options, cb) {
  * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
  * @return {Object} 
  */
+AlchemyAPI.prototype.emotions = function(data, options, cb) {
+	this._doRequest(this._getQuery(data, options, "GetEmotion"), cb);
+};
+
+/**
+ * Function to return category of the data passed in
+ * @param  {String} data The text to be passed to Alchemy can either a url, html text or plain text 
+ * @return {Object} 
+ */
 AlchemyAPI.prototype.category = function(data, options, cb) {
 	this._doRequest(this._getQuery(data, options, "GetCategory"), cb);
 };
