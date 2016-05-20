@@ -24,6 +24,9 @@ Usage
       // Do something with data
     });
 
+For api methods that all for sentiment analysis such as Entity Extraction, Relations and Keywords pass:
+{"sentiment":1} as the second parameter.
+
 Tests
 -----
 To run tests type `npm test`
