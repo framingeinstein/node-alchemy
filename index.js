@@ -17,7 +17,7 @@ var AlchemyAPI = function(api_key, opts) {
 	var settings = {
 		 format: "json"
 		,api_url: "gateway-a.watsonplatform.net"
-		,protocol: "http"
+		,protocol: "https"
 	};
 	
 	settings = extend(settings, opts);
